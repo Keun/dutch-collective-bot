@@ -12,6 +12,9 @@ client.on('ready', () => {
 
 // Bier halen functie
 client.on('message', msg => {
+  // Return if message from another bot
+  if (msg.author.bot) return;
+
   if (msg.content === 'wie moet er bier halen?') {
     // Get members & remove bots
     let members = Array.from(msg.member.guild.members);
@@ -31,15 +34,23 @@ client.on('message', msg => {
     // Reply to msg
     msg.reply(chosenUser[1].user.username + ' is de lul!');
   }
-});
+     
 
-// Random gif with search parameter.
-client.on('message', msg => {
-  // Return if messager is a bot.
-  if (msg.author.bot) return;
+  if (msg.content === 'ping') {
+    msg.reply(`pong!`);
+  }
+
+  // Ignore everything what doesn't have our command prefix
+  if (msg.content.indexOf(prefix) !== 0) return;
+
+    const args = msg.content
+      .slice(prefix.length)
+      .trim()
+      .split(/ +/g);
+    const command = args.shift().toLowerCase();
 
   // Get arguments.
-  const args = msg.content
+  const args2 = msg.content
     .slice('/gif'.length)
     .trim()
     .split(/ +/g);
@@ -51,20 +62,31 @@ client.on('message', msg => {
   }
 
   // Get gif from API
-  axios
-    .get(
-      'http://api.giphy.com/v1/gifs/random?api_key=' +
-        giphyKey +
-        '&limit=1' +
-        searchQuery
-    )
-    .then(resp => {
-      msg.reply(resp.data.data.embed_url);
-    })
-    // Catch error
-    .catch(error => {
-      console.log(error);
-    });
+  if (msg.content === '/gif') {
+    axios
+      .get(
+        'http://api.giphy.com/v1/gifs/random?api_key=' +
+          giphyKey +
+          '&limit=1' +
+          searchQuery
+      )
+      .then(resp => {
+        msg.reply(resp.data.data.embed_url);
+      })
+      // Catch error
+      .catch(error => {
+        console.log(error);
+      });
+  }
+  
+});
+
+// Random gif with search parameter.
+client.on('message', msg => {
+  // Return if messager is a bot.
+  if (msg.author.bot) return;
+
+  
 });
 
 // Create an event listener for new guild members
@@ -77,23 +99,6 @@ client.on('guildMemberAdd', member => {
   channel.send(`Ewa fakka ${member}?`);
 });
 
-client.on('message', async msg => {
-  // Return if message from another bot
-  if (msg.author.bot) return;
-
-  if (msg.content === 'ping') {
-    msg.reply(`pong!`);
-  }
-
-  // Ignore everything what doesn't have our command prefix
-  if (msg.content.indexOf(prefix) !== 0) return;
-
-  const args = msg.content
-    .slice(prefix.length)
-    .trim()
-    .split(/ +/g);
-  const command = args.shift().toLowerCase();
-});
 
 client.login(process.env.BOT_TOKEN);
 //client.login("NTgyMTUzNzQ5NjI4MTkwNzI5.XOpxag.EkRf9V4Ld1Qrl1xGMuPao1484Ag");
