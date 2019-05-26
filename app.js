@@ -3,6 +3,7 @@ const client = new Discord.Client();
 const axios = require('axios');
 
 const prefix = '/';
+const giphyKey = 'BAClUF2ErOH7Fs9Vkt9rk8jnz5GiqT5w';
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -95,3 +96,4 @@ client.on('message', async msg => {
 });
 
 client.login(process.env.BOT_TOKEN);
+//client.login("NTgyMTUzNzQ5NjI4MTkwNzI5.XOpxag.EkRf9V4Ld1Qrl1xGMuPao1484Ag");
