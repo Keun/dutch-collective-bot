@@ -28,18 +28,18 @@ client.on('message', msg => {
     .split(/ +/g);
   const command = args.shift().toLowerCase();
 
-  switch(command){
+  switch (command) {
     case 'bierhalen':
       bierHalen(msg);
-    break;
+      break;
     case 'gif':
-      randomGif(msg,args);
-    break;
+      randomGif(msg, args);
+      break;
     default:
       msg.reply('Dit bestaat echt niet! wat denk je zelf.');
-    break;
+      break;
   }
-  
+
 });
 
 
@@ -56,10 +56,10 @@ client.on('message', msg => {
 client.login(process.env.BOT_TOKEN);//discord Dutch Collective
 //client.login("NTcwMTcwODU2NTU1NDEzNTE1.XOp7XQ.gQPNjEVWMqGvI_akML2TKACt99Q");//lokaal testen
 
-function bierHalen(msg){
+function bierHalen(msg) {
   // Get members & remove bots
   let members = Array.from(msg.member.guild.members);
-  members = members.filter(function(user) {
+  members = members.filter(function (user) {
     return !user[1].user.bot;
   });
 
@@ -68,7 +68,7 @@ function bierHalen(msg){
   client.users
     .get(chosenUser[0])
     .send('BIER HALEN!')
-    .then(function() {
+    .then(function () {
       console.log('Send!');
     });
 
@@ -76,24 +76,24 @@ function bierHalen(msg){
   msg.reply(chosenUser[1].user.username + ' is de lul!');
 }
 
-function randomGif(msg, searchParams){
-   // Set search query if we have a argument.
-   let searchQuery = '';
-   if (searchParams[2]) {
-     searchQuery = '&tag=' + args[2];
-   }
-   axios
-     .get(
-       'http://api.giphy.com/v1/gifs/random?api_key=' +
-         giphyKey +
-         '&limit=1' +
-         searchQuery
-     )
-     .then(resp => {
-       msg.reply(resp.data.data.embed_url);
-     })
-     // Catch error
-     .catch(error => {
-       console.log(error);
-     });
+function randomGif(msg, searchParams) {
+  // Set search query if we have a argument.
+  let searchQuery = '';
+  if (searchParams[2]) {
+    searchQuery = '&tag=' + args[2];
+  }
+  axios
+    .get(
+      'http://api.giphy.com/v1/gifs/random?api_key=' +
+      giphyKey +
+      '&limit=1' +
+      searchQuery
+    )
+    .then(resp => {
+      msg.reply(resp.data.data.embed_url);
+    })
+    // Catch error
+    .catch(error => {
+      console.log(error);
+    });
 }
