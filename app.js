@@ -105,4 +105,4 @@ client.on('message', async msg => {
   const command = args.shift().toLowerCase();
 });
 
-client.login('NTQ0ODM0MjAyMjIzNTA5NTA0.D0Q4Eg.A1PLjbEb6JGEd97b0_4jdTZtdNc');
+client.login('NTgyMTUzNzQ5NjI4MTkwNzI5.XOptQg.maBTiPzz21MNM9b2Mr3XKmUMIXY');
