@@ -79,15 +79,17 @@ function bierHalen(msg) {
 function randomGif(msg, searchParams) {
   // Set search query if we have a argument.
   let searchQuery = '';
-  if (searchParams[2]) {
-    searchQuery = '&tag=' + args[2];
+  if (searchParams[0]) {
+    searchQuery = '&tag=' + searchParams[0];
   }
+  var url = 'http://api.giphy.com/v1/gifs/random?api_key=' +
+  giphyKey +
+  '&limit=1' +
+  searchQuery;
+
   axios
     .get(
-      'http://api.giphy.com/v1/gifs/random?api_key=' +
-      giphyKey +
-      '&limit=1' +
-      searchQuery
+      url
     )
     .then(resp => {
       msg.reply(resp.data.data.embed_url);
