@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const ytdl = require('ytdl-core');
 const schedule = require('node-schedule');
 const axios = require('axios');
 
@@ -104,33 +103,6 @@ client.on('message', async msg => {
     .trim()
     .split(/ +/g);
   const command = args.shift().toLowerCase();
-
-  const ytUrl = new RegExp('^(https?://)?(www.)?(youtube.com|youtu.?be)/.+$');
-
-  if (command == 'play' && ytUrl.test(args[0])) {
-    let channel = msg.member.voiceChannel;
-    let streamOptions = { seek: 0, volume: 0.3 };
-    let url = args[0];
-    if (channel) {
-      channel
-        .join()
-        .then(connection => {
-          console.log('joined channel');
-          let stream = ytdl(url, {
-            filter: 'audioonly'
-          });
-          let dispatcher = connection.playStream(stream, streamOptions);
-          console.log('started playing');
-        })
-        .catch(e => {
-          console.error(e);
-        });
-    } else {
-      msg.reply(`You are not in a voiceChannel!`);
-    }
-  } else if (!ytUrl.test(args[0])) {
-    msg.reply(`That is not a Youtube Video!`);
-  }
 });
 
 client.login('NTQ0ODM0MjAyMjIzNTA5NTA0.D0Q4Eg.A1PLjbEb6JGEd97b0_4jdTZtdNc');
