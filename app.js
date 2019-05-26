@@ -4,10 +4,29 @@ const axios = require('axios');
 
 const prefix = '/';
 const giphyKey = 'BAClUF2ErOH7Fs9Vkt9rk8jnz5GiqT5w';
+const emoji_plus = '➕';
+const emoji_maybe = '❓';
+const emoji_min = '➖';
+
+//client.login(process.env.BOT_TOKEN);//discord Dutch Collective
+client.login("NTgyMjU3NTI4NzM4NTQ1NjY0.XOrLoA.Z_4BegP3CVUPEFUa7EGzWfxxTcY");//lokaal testen
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
+});
+
+client.on('messageReactionAdd', (reaction, user) => {
+	console.log(reaction);
+	//console.log(user);
+	console.log(reaction._emoji.name);
+	//reaction.message.edit('asdfasdfasdf');
+
+    console.log('a reaction has been added');
+});
+ 
+client.on('messageReactionRemove', (reaction, user) => {
+    console.log('a reaction has been removed');
 });
 
 // Bier halen functie
@@ -29,6 +48,9 @@ client.on('message', msg => {
   const command = args.shift().toLowerCase();
 
   switch (command) {
+	case 'create':
+		createActivity(msg);
+		break;
     case 'bierhalen':
       bierHalen(msg);
       break;
@@ -53,9 +75,6 @@ client.on('message', msg => {
 //   channel.send(`Ewa fakka ${member}?`);
 // });
 
-client.login(process.env.BOT_TOKEN);//discord Dutch Collective
-//client.login("NTcwMTcwODU2NTU1NDEzNTE1.XOp7XQ.gQPNjEVWMqGvI_akML2TKACt99Q");//lokaal testen
-
 function bierHalen(msg) {
   // Get members & remove bots
   let members = Array.from(msg.member.guild.members);
@@ -71,9 +90,8 @@ function bierHalen(msg) {
     .then(function () {
       console.log('Send!');
     });
-
   // Reply to msg
-  msg.reply(chosenUser[1].user.username + ' is de lul!');
+  msg.channel.send('<@'+chosenUser[1].user.id + '> is de lul!');
 }
 
 function randomGif(msg, searchParams) {
@@ -92,10 +110,24 @@ function randomGif(msg, searchParams) {
       url
     )
     .then(resp => {
-      msg.reply(resp.data.data.embed_url);
+      msg.channel.send(resp.data.data.embed_url);
     })
     // Catch error
     .catch(error => {
       console.log(error);
     });
+}
+
+function createActivity(msg){
+
+	user = msg.member;
+	user = user.toString();
+	
+	msg.channel.send("Created by: "+user)
+		.then((message) => {
+			message.react(emoji_plus);
+			message.react(emoji_maybe);
+			message.react(emoji_min)
+		});
+
 }
