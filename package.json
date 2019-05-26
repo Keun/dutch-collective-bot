@@ -1,0 +1,35 @@
+{
+  "name": "geertje",
+  "version": "1.0.0",
+  "description": "Just a discord bot",
+  "main": "app.js",
+  "engines": {
+    "node": "12.2.0",
+    "npm": "6.9.0"
+  },
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "ffmpeg-binaries": "^4.0.0",
+    "node-schedule": "^1.3.2",
+    "opusscript": "0.0.6",
+    "ytdl-core": "^0.29.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "heroku-postbuild": "npm install",
+    "start": "npm install && node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lavaswimmer/geertje.git"
+  },
+  "keywords": [
+    "discord"
+  ],
+  "author": "Thom Hooijer, Ilon Vis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lavaswimmer/geertje/issues"
+  },
+  "homepage": "https://github.com/lavaswimmer/geertje#readme"
+}
