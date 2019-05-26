@@ -12,7 +12,7 @@ client.on('ready', () => {
   // const date = new Date(2019, 2, 25, 23, 41, 0);
   const date = { hour: 16, minute: 0, dayOfWeek: 5 };
   schedule.scheduleJob(date, function() {
-    const channel = client.channels.get('545244136907866123');
+    const channel = client.channels.get('582083661307052033');
     // Do nothing if the channel wasn't found on this server
     if (!channel) return;
     // Send the message, mentioning the member
@@ -105,4 +105,4 @@ client.on('message', async msg => {
   const command = args.shift().toLowerCase();
 });
 
-client.login('NTgyMTUzNzQ5NjI4MTkwNzI5.XOptQg.maBTiPzz21MNM9b2Mr3XKmUMIXY');
+client.login(process.env.BOT_TOKEN);
