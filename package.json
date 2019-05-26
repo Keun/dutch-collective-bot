@@ -19,15 +19,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lavaswimmer/geertje.git"
+    "url": "git+https://github.com/Keun/dutch-collective-bot"
   },
   "keywords": [
     "discord"
   ],
-  "author": "Thom Hooijer, Ilon Vis",
+  "author": "Koen Borghols",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/lavaswimmer/geertje/issues"
+    "url": "https://github.com/Keun/dutch-collective-bot/issues"
   },
-  "homepage": "https://github.com/lavaswimmer/geertje#readme"
+  "homepage": "https://github.com/Keun/dutch-collective-bot#readme"
 }
