@@ -51,7 +51,7 @@ client.on('message', msg => {
 
   // Get arguments.
   const args = msg.content
-    .slice('@Geertje'.length)
+    .slice('/gif'.length)
     .trim()
     .split(/ +/g);
 
