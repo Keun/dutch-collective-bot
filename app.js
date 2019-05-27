@@ -8,8 +8,7 @@ const emoji_plus = '➕';
 const emoji_maybe = '❓';
 const emoji_min = '➖';
 
-//client.login(process.env.BOT_TOKEN);//discord Dutch Collective
-client.login("NTgyMjU3NTI4NzM4NTQ1NjY0.XOrLoA.Z_4BegP3CVUPEFUa7EGzWfxxTcY");//lokaal testen
+client.login(process.env.BOT_TOKEN);//discord Dutch Collective
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
