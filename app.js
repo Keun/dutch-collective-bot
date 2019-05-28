@@ -18,7 +18,7 @@ client.on('ready', () => {
 });
 
 client.on('messageReactionAdd', (reaction, user) => {
-	if (!reaction.message.author.bot) {
+	if(user.bot) return;
 
 	const userId = user.id;
 	const userName = user.username;
@@ -74,7 +74,6 @@ client.on('messageReactionAdd', (reaction, user) => {
 				reaction.remove(user);
 			break;
 		}
-	}
 	}
 });
 
