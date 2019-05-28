@@ -75,6 +75,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 			break;
 		}
 	}
+	}
 });
 
 
@@ -110,7 +111,6 @@ client.on('message', msg => {
       msg.reply('Dit bestaat echt niet! wat denk je zelf.');
       break;
   }
-}
 
 });
 
