@@ -18,61 +18,62 @@ client.on('ready', () => {
 });
 
 client.on('messageReactionAdd', (reaction, user) => {
-	if (message.author.bot) return;
+	if (!message.author.bot){
 
-	const userId = user.id;
-	const userName = user.username;
-	var textMessage = reaction.message.content.split('----');
-	if(userName != botName){
-		//console.log(reaction.message.content);
-    	var newMessage = textMessage[0] + '----';
-    
-		switch(reaction._emoji.name){
-			case emoji_min:
-				tempMessage2 = textMessage[2];
-				if (textMessage[2].includes('<@'+userId+'>')) {//if in users BACKUP, then remove
-					tempMessage2 = textMessage[2].replace('\n<@'+userId+'>', '');
-				}
+		const userId = user.id;
+		const userName = user.username;
+		var textMessage = reaction.message.content.split('----');
+		if(userName != botName){
+			//console.log(reaction.message.content);
+			var newMessage = textMessage[0] + '----';
+		
+			switch(reaction._emoji.name){
+				case emoji_min:
+					tempMessage2 = textMessage[2];
+					if (textMessage[2].includes('<@'+userId+'>')) {//if in users BACKUP, then remove
+						tempMessage2 = textMessage[2].replace('\n<@'+userId+'>', '');
+					}
 
-				tempMessage = textMessage[1];
-				if (textMessage[1].includes('<@'+userId+'>')) { //if in users TEAM, then remove
-					tempMessage = textMessage[1].replace('<@'+userId+'>\n', '');
-				}
+					tempMessage = textMessage[1];
+					if (textMessage[1].includes('<@'+userId+'>')) { //if in users TEAM, then remove
+						tempMessage = textMessage[1].replace('<@'+userId+'>\n', '');
+					}
 
-				newMessage += tempMessage + '----' + tempMessage2;
-				reaction.message.edit(newMessage);
-				reaction.remove(user);
+					newMessage += tempMessage + '----' + tempMessage2;
+					reaction.message.edit(newMessage);
+					reaction.remove(user);
 
-			break;
-			case emoji_plus:
-				tempMessage = textMessage[2];
-				if (textMessage[2].includes('<@'+userId+'>')) { //if user in BACKUP, then remove
-					tempMessage = textMessage[2].replace('\n<@'+userId+'>', '');
-				}
+				break;
+				case emoji_plus:
+					tempMessage = textMessage[2];
+					if (textMessage[2].includes('<@'+userId+'>')) { //if user in BACKUP, then remove
+						tempMessage = textMessage[2].replace('\n<@'+userId+'>', '');
+					}
 
-				if (!textMessage[1].includes('<@'+userId+'>')) {//if user NOT already in TEAM, then add.
-					newMessage += textMessage[1] + '<@'+userId+'>\n' + '----' + tempMessage;
-				}else{
-					newMessage += textMessage[1] + '----' + tempMessage;
-				}
-				
-				reaction.message.edit(newMessage);
-				reaction.remove(user);
-			break;
-			case emoji_maybe:
-				tempMessage = textMessage[1];
-				if (textMessage[1].includes('<@'+userId+'>')) {//if user in TEAM, then remove
-					tempMessage = textMessage[1].replace('<@'+userId+'>\n', '');
-				}
+					if (!textMessage[1].includes('<@'+userId+'>')) {//if user NOT already in TEAM, then add.
+						newMessage += textMessage[1] + '<@'+userId+'>\n' + '----' + tempMessage;
+					}else{
+						newMessage += textMessage[1] + '----' + tempMessage;
+					}
+					
+					reaction.message.edit(newMessage);
+					reaction.remove(user);
+				break;
+				case emoji_maybe:
+					tempMessage = textMessage[1];
+					if (textMessage[1].includes('<@'+userId+'>')) {//if user in TEAM, then remove
+						tempMessage = textMessage[1].replace('<@'+userId+'>\n', '');
+					}
 
-				if (!textMessage[2].includes('<@'+userId+'>')) {//if user NOT already in BACKUP, then add.
-					newMessage += tempMessage + '----' + textMessage[2] + '\n<@'+userId+'>';
-				}else{
-					newMessage += tempMessage + '----' + textMessage[2];
-				}
-				reaction.message.edit(newMessage);
-				reaction.remove(user);
-			break;
+					if (!textMessage[2].includes('<@'+userId+'>')) {//if user NOT already in BACKUP, then add.
+						newMessage += tempMessage + '----' + textMessage[2] + '\n<@'+userId+'>';
+					}else{
+						newMessage += tempMessage + '----' + textMessage[2];
+					}
+					reaction.message.edit(newMessage);
+					reaction.remove(user);
+				break;
+			}
 		}
 	}
 });
