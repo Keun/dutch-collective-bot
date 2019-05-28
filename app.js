@@ -7,6 +7,8 @@ const giphyKey = 'BAClUF2ErOH7Fs9Vkt9rk8jnz5GiqT5w';
 const emoji_plus = '➕';
 const emoji_maybe = '❓';
 const emoji_min = '➖';
+const botId = '136927220793868288';
+const botName = 'TestAIBot';
 
 client.login(process.env.BOT_TOKEN);//discord Dutch Collective
 
@@ -16,17 +18,63 @@ client.on('ready', () => {
 });
 
 client.on('messageReactionAdd', (reaction, user) => {
-	console.log(reaction);
-	//console.log(user);
-	console.log(reaction._emoji.name);
-	//reaction.message.edit('asdfasdfasdf');
+	const userId = user.id;
+	const userName = user.username;
+	var textMessage = reaction.message.content.split('----');
+	if(userName != botName){
+		//console.log(reaction.message.content);
+    	var newMessage = textMessage[0] + '----';
+    
+		switch(reaction._emoji.name){
+			case emoji_min:
+				tempMessage2 = textMessage[2];
+				if (textMessage[2].includes('<@'+userId+'>')) {//if in users BACKUP, then remove
+					tempMessage2 = textMessage[2].replace('\n<@'+userId+'>', '');
+				}
 
-    console.log('a reaction has been added');
+				tempMessage = textMessage[1];
+				if (textMessage[1].includes('<@'+userId+'>')) { //if in users TEAM, then remove
+					tempMessage = textMessage[1].replace('<@'+userId+'>\n', '');
+				}
+
+				newMessage += tempMessage + '----' + tempMessage2;
+				reaction.message.edit(newMessage);
+				reaction.remove(user);
+
+			break;
+			case emoji_plus:
+				tempMessage = textMessage[2];
+				if (textMessage[2].includes('<@'+userId+'>')) { //if user in BACKUP, then remove
+					tempMessage = textMessage[2].replace('\n<@'+userId+'>', '');
+				}
+
+				if (!textMessage[1].includes('<@'+userId+'>')) {//if user NOT already in TEAM, then add.
+					newMessage += textMessage[1] + '<@'+userId+'>\n' + '----' + tempMessage;
+				}else{
+					newMessage += textMessage[1] + '----' + tempMessage;
+				}
+				
+				reaction.message.edit(newMessage);
+				reaction.remove(user);
+			break;
+			case emoji_maybe:
+				tempMessage = textMessage[1];
+				if (textMessage[1].includes('<@'+userId+'>')) {//if user in TEAM, then remove
+					tempMessage = textMessage[1].replace('<@'+userId+'>\n', '');
+				}
+
+				if (!textMessage[2].includes('<@'+userId+'>')) {//if user NOT already in BACKUP, then add.
+					newMessage += tempMessage + '----' + textMessage[2] + '\n<@'+userId+'>';
+				}else{
+					newMessage += tempMessage + '----' + textMessage[2];
+				}
+				reaction.message.edit(newMessage);
+				reaction.remove(user);
+			break;
+		}
+	}
 });
- 
-client.on('messageReactionRemove', (reaction, user) => {
-    console.log('a reaction has been removed');
-});
+
 
 // Bier halen functie
 client.on('message', msg => {
@@ -47,9 +95,9 @@ client.on('message', msg => {
   const command = args.shift().toLowerCase();
 
   switch (command) {
-	case 'create':
-		createActivity(msg);
-		break;
+    case 'create':
+      createActivity(msg);
+      break;
     case 'bierhalen':
       bierHalen(msg);
       break;
@@ -120,13 +168,25 @@ function randomGif(msg, searchParams) {
 function createActivity(msg){
 
 	user = msg.member;
-	user = user.toString();
-	
-	msg.channel.send("Created by: "+user)
-		.then((message) => {
-			message.react(emoji_plus);
-			message.react(emoji_maybe);
-			message.react(emoji_min)
-		});
+  user = user.toString();
+  //console.log(msg.content);
+  var title = msg.content.match(/\[(.*?)\]/g);
+  var time = msg.content
+  .replace(title, '')
+  .trim()
+  .split(/ +/g);
+  if(typeof title != undefined || typeof title != null){
+	var title = title[0].replace('[','').replace(']','');
+    msg.channel.send("**Activiteit:** "+title+"\n**Tijd:** "+time[1]+" - "+time[2]+"\n----\n**Team**:\n"+user+"\n----\n**Back-up**:\n")
+      .then((message) => {
+        message.react(emoji_plus)
+          .then(() => {
+            message.react(emoji_maybe)
+            .then(() => {
+              message.react(emoji_min);
+            });
+          });
+      });
+  }
 
 }
