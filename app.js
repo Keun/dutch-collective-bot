@@ -99,11 +99,15 @@ client.on('message', msg => {
     case 'create':
       createActivity(msg);
       break;
-    case 'bierhalen':
-      bierHalen(msg);
-      break;
+    // case 'bierhalen':
+    //     if(msg.member.roles.find(r => r.name === "Admin 2.0") || msg.member.roles.find(r => r.name === "Elites") || msg.member.roles.find(r => r.name === "Bazen")){
+    //       bierHalen(msg);
+    //     }
+    //     break;
     case 'gif':
-      randomGif(msg, args);
+        if(msg.member.roles.find(r => r.name === "Admin 2.0") || msg.member.roles.find(r => r.name === "Elites") || msg.member.roles.find(r => r.name === "Bazen")){
+          randomGif(msg, args);
+        }
       break;
     default:
       msg.reply('Dit bestaat echt niet! wat denk je zelf.');
