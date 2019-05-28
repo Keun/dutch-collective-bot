@@ -176,8 +176,8 @@ function createActivity(msg){
   .replace(title, '')
   .trim()
   .split(/ +/g);
-  if(typeof title != undefined || typeof title != null){
-	var title = title[0].replace('[','').replace(']','');
+  if(typeof title != undefined && title != null ){
+	  var title = title[0].replace('[','').replace(']','');
     msg.channel.send("**Activiteit:** "+title+"\n**Tijd:** "+time[1]+" - "+time[2]+"\n----\n**Team**:\n"+user+"\n----\n**Back-up**:\n")
       .then((message) => {
         message.react(emoji_plus)
@@ -188,6 +188,8 @@ function createActivity(msg){
             });
           });
       });
+  }else{
+    msg.reply('Commando klopt niet, gebruik `/create [Activiteit] dag tijd`');
   }
 
 }
