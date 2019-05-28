@@ -18,7 +18,7 @@ client.on('ready', () => {
 });
 
 client.on('messageReactionAdd', (reaction, user) => {
-	if (reaction.message.author.bot) return;
+	if (!reaction.message.author.bot) {
 
 	const userId = user.id;
 	const userName = user.username;
@@ -110,6 +110,7 @@ client.on('message', msg => {
       msg.reply('Dit bestaat echt niet! wat denk je zelf.');
       break;
   }
+}
 
 });
 
