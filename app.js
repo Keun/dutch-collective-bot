@@ -18,6 +18,8 @@ client.on('ready', () => {
 });
 
 client.on('messageReactionAdd', (reaction, user) => {
+	if (message.author.bot) return;
+
 	const userId = user.id;
 	const userName = user.username;
 	var textMessage = reaction.message.content.split('----');
