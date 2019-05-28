@@ -7,8 +7,7 @@ const giphyKey = 'BAClUF2ErOH7Fs9Vkt9rk8jnz5GiqT5w';
 const emoji_plus = '➕';
 const emoji_maybe = '❓';
 const emoji_min = '➖';
-const botId = '136927220793868288';
-const botName = 'TestAIBot';
+const botName = 'GameGhost';
 
 client.login(process.env.BOT_TOKEN);//discord Dutch Collective
 
