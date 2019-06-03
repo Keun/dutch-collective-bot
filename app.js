@@ -1,5 +1,12 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const client = new Discord.Client({ 
+  messageCacheMaxSize:50000,
+  autofetch: [
+  'MESSAGE_CREATE',
+  'MESSAGE_UPDATE',
+  'MESSAGE_REACTION_ADD',
+  'MESSAGE_REACTION_REMOVE',
+] });
 const axios = require('axios');
 
 const prefix = '/';
@@ -12,6 +19,18 @@ const botName = 'GameGhost';
 client.login(process.env.BOT_TOKEN);//discord Dutch Collective
 
 client.on('ready', () => {
+  var serverID;
+  client.guilds.forEach(server => { 
+    serverID = server.id;
+  })
+
+  var guildx = client.guilds.find( guilds => guilds.id == serverID);
+
+  guildx.channels.forEach(channel => { 
+    if(channel.type == "text"){
+      channel.fetchMessages({limit: 100});
+    }
+  });
   console.log(`Logged in as ${client.user.tag}!`);
 
 });
@@ -99,11 +118,11 @@ client.on('message', msg => {
     case 'create':
       createActivity(msg);
       break;
-    // case 'bierhalen':
-    //     if(msg.member.roles.find(r => r.name === "Admin 2.0") || msg.member.roles.find(r => r.name === "Elites") || msg.member.roles.find(r => r.name === "Bazen")){
-    //       bierHalen(msg);
-    //     }
-    //     break;
+    case 'bierhalen':
+        if(msg.member.roles.find(r => r.name === "Admin 2.0") || msg.member.roles.find(r => r.name === "Elites") || msg.member.roles.find(r => r.name === "Bazen")){
+          bierHalen(msg);
+        }
+        break;
     case 'gif':
         if(msg.member.roles.find(r => r.name === "Admin 2.0") || msg.member.roles.find(r => r.name === "Elites") || msg.member.roles.find(r => r.name === "Bazen")){
           randomGif(msg, args);
