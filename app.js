@@ -51,7 +51,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 
     if(textMessage[3]){
       var tmpMaxN = textMessage[3].match(/\[(.*?)\]/g);
-      if(tmpMaxN[0]){
+      if(typeof tmpMaxN == Array){
         var maxNumberPlayers = parseInt(tmpMaxN[0].replace(' spelers', '').replace('[', '').replace(']', ''));
       }
     }
