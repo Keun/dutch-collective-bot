@@ -36,20 +36,32 @@ client.on('ready', () => {
 });
 
 client.on('messageReactionAdd', (reaction, user) => {
+	
 	if(user.bot) return;
-
+	// if (reaction.message.author.bot) return;
+  //console.log(reaction);
 	const userId = user.id;
 	const userName = user.username;
-	var textMessage = reaction.message.content.split('----');
+  var textMessage = reaction.message.content.split('----');
+
 	if(userName != botName){
-		//console.log(reaction.message.content);
-    	var newMessage = textMessage[0] + '----';
-    
+    var newMessage = textMessage[0] + '----';
+    var countActive = (textMessage[1].match(/<@/g) || []).length;
+    //var countBackup = (textMessage[2].match(/<@/g) || []).length;
+
+    if(textMessage[3]){
+      var tmpMaxN = textMessage[3].match(/\[(.*?)\]/g);
+      if(tmpMaxN[0]){
+        var maxNumberPlayers = parseInt(tmpMaxN[0].replace(' spelers', '').replace('[', '').replace(']', ''));
+      }
+    }
+    //console.log(reaction.message);
+    //client.users.get(userId).send("someMessage");
 		switch(reaction._emoji.name){
 			case emoji_min:
 				tempMessage2 = textMessage[2];
 				if (textMessage[2].includes('<@'+userId+'>')) {//if in users BACKUP, then remove
-					tempMessage2 = textMessage[2].replace('\n<@'+userId+'>', '');
+					tempMessage2 = textMessage[2].replace('<@'+userId+'>\n', '');
 				}
 
 				tempMessage = textMessage[1];
@@ -57,15 +69,24 @@ client.on('messageReactionAdd', (reaction, user) => {
 					tempMessage = textMessage[1].replace('<@'+userId+'>\n', '');
 				}
 
-				newMessage += tempMessage + '----' + tempMessage2;
+				newMessage += tempMessage + '----' + tempMessage2 + '----' + textMessage[3];
 				reaction.message.edit(newMessage);
 				reaction.remove(user);
 
 			break;
 			case emoji_plus:
+        if(maxNumberPlayers == countActive && !textMessage[1].includes('<@'+userId+'>')){
+          var activityName = textMessage[0].replace('**','').replace(':**',':').split('\n');
+          reaction.message.channel.send('<@'+userId+'> --- '+activityName[0]+' *Zit vol!*')
+            .then(msg => {
+              msg.delete(15000);
+            });
+          reaction.remove(user);
+          return;
+        }
 				tempMessage = textMessage[2];
 				if (textMessage[2].includes('<@'+userId+'>')) { //if user in BACKUP, then remove
-					tempMessage = textMessage[2].replace('\n<@'+userId+'>', '');
+					tempMessage = textMessage[2].replace('<@'+userId+'>\n', '');
 				}
 
 				if (!textMessage[1].includes('<@'+userId+'>')) {//if user NOT already in TEAM, then add.
@@ -73,7 +94,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 				}else{
 					newMessage += textMessage[1] + '----' + tempMessage;
 				}
-				
+        newMessage += '----' + textMessage[3];
 				reaction.message.edit(newMessage);
 				reaction.remove(user);
 			break;
@@ -84,10 +105,12 @@ client.on('messageReactionAdd', (reaction, user) => {
 				}
 
 				if (!textMessage[2].includes('<@'+userId+'>')) {//if user NOT already in BACKUP, then add.
-					newMessage += tempMessage + '----' + textMessage[2] + '\n<@'+userId+'>';
+					newMessage += tempMessage + '----' + textMessage[2] + '<@'+userId+'>\n';
 				}else{
 					newMessage += tempMessage + '----' + textMessage[2];
-				}
+        }
+        
+        newMessage += '----' + textMessage[3];
 				reaction.message.edit(newMessage);
 				reaction.remove(user);
 			break;
@@ -193,15 +216,32 @@ function createActivity(msg){
 
 	user = msg.member;
   user = user.toString();
+  var error = '';
   //console.log(msg.content);
   var title = msg.content.match(/\[(.*?)\]/g);
-  var time = msg.content
+  var data = msg.content
   .replace(title, '')
   .trim()
   .split(/ +/g);
-  if(typeof title != undefined && title != null ){
-	  var title = title[0].replace('[','').replace(']','');
-    msg.channel.send("**Activiteit:** "+title+"\n**Tijd:** "+time[1]+" - "+time[2]+"\n----\n**Team**:\n"+user+"\n----\n**Back-up**:\n")
+
+  if(data[3]){
+    var type = parseInt(data[3].replace('spelers', ''));
+    if(isNaN(type)){
+      error = "\n `spelers` klopt niet. Dit moet een Getal zijn";
+    }
+  }
+  var dayData = data[1];
+  var timeData = data[2];
+  
+
+  if(typeof title != undefined && title != null && data.length == 4 && error == ''){
+    var title = title[0].replace('[','').replace(']','');
+    newMessage = "**Activiteit:** "+title+"\n**Tijd:** "+dayData+" - "+timeData+"\n----\n**Team**:\n"+user+"\n----\n**Back-up**:\n----\n";
+
+    if(type != undefined){
+      newMessage += "**Max spelers**:\n["+type+" spelers]";
+    }
+    msg.channel.send(newMessage)
       .then((message) => {
         message.react(emoji_plus)
           .then(() => {
@@ -212,7 +252,11 @@ function createActivity(msg){
           });
       });
   }else{
-    msg.reply('Commando klopt niet, gebruik `/create [Activiteit] dag tijd`');
+    var messageError = 'Commando klopt niet, gebruik `/create [Activiteit] dag tijd 3spelers`';
+    if(error != ''){
+      messageError += error;
+    }
+    msg.reply(messageError);
   }
 
 }
