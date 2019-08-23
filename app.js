@@ -1,3 +1,4 @@
+const process = require('bot-config.js');
 const Discord = require('discord.js');
 const client = new Discord.Client({ 
   messageCacheMaxSize:50000,
